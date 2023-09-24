@@ -1,0 +1,19 @@
+{
+  "http-api": {
+    "url": "https://toncenter.com/api/v2/jsonRPC",
+    "api_token": ""
+  },
+  "database": {
+    "host": "localhost",
+    "port": 5432,
+    "dbname": "changeme",
+    "credentials_rw": {
+      "user": "changeme",
+      "password": "changeme"
+    }
+  },
+  "intervals": {
+    "shards": 10,
+    "tps": 10
+  }
+}
