@@ -16,7 +16,6 @@ class ShardsThread(Thread):
 
     def run(self):
 
-        dummy_result = 1
         while True:
             if self.gk.kill_now:
                 self.log.log(self.__class__.__name__, 3, '[{}] Terminating'.format(self.id))
@@ -24,8 +23,13 @@ class ShardsThread(Thread):
 
             start_timestamp = time.time()
 
-            rs = self.api.jsonrpc("getMasterchainInfo", {})
-            seqno = rs["result"]["last"]["seqno"]
+            try:
+                rs = self.api.jsonrpc("shards", params)
+                seqno = rs["result"]["last"]["seqno"]
+            except Exception as e:
+                self.log.log(self.__class__.__name__, 1, "Query failure: {}".format(str(e)))
+                time.sleep(2)
+                continue
 
             params = {
                 "seqno": seqno
@@ -42,11 +46,6 @@ class ShardsThread(Thread):
                 self.log.log(self.__class__.__name__, 3, '[{}] Query failed in {} ms'.format(self.id,runtime_ms))
             elif rs["ok"]:
                 result = len(rs['result']['shards'])
-
-                # FAKE GENERATOR, REMOVE ME!!!!!!
-                #
-                dummy_result += random.randint(0,10)
-                result = dummy_result
 
                 self.log.log(self.__class__.__name__, 3, '[{}] Query completed in {} ms with result {} shards'.format(self.id,runtime_ms, result))
                 self.queue.put([int(time.time()), result])

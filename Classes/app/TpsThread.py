@@ -17,13 +17,14 @@ class TpsThread(Thread):
 
     def run(self):
         params={
-            "address": "EQBg_ebI0nzsQBRfQ4u9dvemQKApcQLfZqBNVidIwVw2owIH",
-            "method": "seqno",
+            "address": self.params["rps_counter"],
+            "method": "get_counter",
             "stack": []
         }
         self.log.log(self.__class__.__name__, 3, '[{}] initializing process with counter {}'.format(self.id,self.params["rps_counter"]))
 
-        dummy_result = 10000
+        last_result = None
+        last_ts = None
         while True:
             if self.gk.kill_now:
                 self.log.log(self.__class__.__name__, 3, '[{}] Terminating'.format(self.id))
@@ -42,15 +43,14 @@ class TpsThread(Thread):
             if not rs:
                 self.log.log(self.__class__.__name__, 3, '[{}] Query failed in {} ms'.format(self.id,runtime_ms))
             elif rs["ok"]:
-                result = rs['result']['stack']
-
-                # FAKE GENERATOR, REMOVE ME!!!!!!
-                #
-                dummy_result += random.randint(0,200)
-                result = dummy_result
-
+                result = int(rs['result']['stack'][0][1],0)
                 self.log.log(self.__class__.__name__, 3, '[{}] Query completed in {} ms with result {} tps'.format(self.id,runtime_ms, result))
-                self.queue.put([int(time.time()), result])
+
+                if last_result is not None:
+                    self.queue.put([int(time.time()), int((last_result - result)/time.time()-last_ts)])
+
+                last_result = result
+                last_ts = time.time()
             else:
                 self.log.log(self.__class__.__name__, 3, '[{}] Query failed in {} ms'.format(self.id,runtime_ms))
 

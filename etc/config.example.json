@@ -12,8 +12,11 @@
       "password": "changeme"
     }
   },
-  "intervals": {
-    "shards": 10,
-    "tps": 10
+  "limits": {
+    "shards_rps": 0.1,
+    "tps_rps": 0.1
+  },
+  "tps": {
+    "rps_counter": "changeme"
   }
 }

@@ -5,7 +5,6 @@ import Libraries.tools.general as gt
 from Classes.Logger import Logger
 import psycopg
 from Classes.TonHttpApi import TonHttpApi
-from Classes.TonIndexer import TonIndexer
 import Classes.GracefulKiller as GracefulKiller
 
 class AppConfig:
@@ -75,8 +74,5 @@ class AppConfig:
 
             if "http-api" in self.config:
                 self.http_api = TonHttpApi(self.config["http-api"], self.log)
-
-            if "indexer" in self.config:
-                self.indexer = TonIndexer(self.config["indexer"], self.log)
 
 # end class
