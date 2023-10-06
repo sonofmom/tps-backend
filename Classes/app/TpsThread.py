@@ -47,7 +47,7 @@ class TpsThread(Thread):
                 self.log.log(self.__class__.__name__, 3, '[{}] Query completed in {} ms with result {} tps'.format(self.id,runtime_ms, result))
 
                 if last_result is not None:
-                    self.queue.put([int(time.time()), int((result-last_result)/time.time()-last_ts)])
+                    self.queue.put([int(time.time()), int((result-last_result)/time.time()-last_ts), int(result)])
 
                 last_result = result
                 last_ts = time.time()

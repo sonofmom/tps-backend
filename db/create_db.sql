@@ -16,7 +16,8 @@ create table tps
         constraint tps_pk
             primary key,
     record_timestamp timestamp with time zone,
-    value            integer
+    value            integer,
+    counter          bigint
 );
 
 create index tps_record_timestamp_index

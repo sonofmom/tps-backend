@@ -80,7 +80,7 @@ def run():
                             record_timestamp,
                             value
                             )
-                            VALUES (%s,%s) RETURNING *;
+                            VALUES (%s,%s);
                 """
 
                 dbc.execute(sql, (
@@ -94,14 +94,16 @@ def run():
 
                 sql = """INSERT INTO tps (
                             record_timestamp,
-                            value
+                            value,
+                            counter
                             )
-                            VALUES (%s,%s) RETURNING *;
+                            VALUES (%s,%s,%s);
                 """
 
                 dbc.execute(sql, (
                     gt.get_datetime_utc(timestamp=result[0], return_none=True),
-                    result[1],))
+                    result[1],
+                    result[2],))
 
         cfg.db_rw.commit()
         time.sleep(1)
