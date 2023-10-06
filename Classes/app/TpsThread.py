@@ -23,8 +23,8 @@ class TpsThread(Thread):
         }
         self.log.log(self.__class__.__name__, 3, '[{}] initializing process with counter {}'.format(self.id,self.params["rps_counter"]))
 
-        last_result = None
-        last_ts = None
+        previous_result = None
+        previous_ts = None
         while True:
             if self.gk.kill_now:
                 self.log.log(self.__class__.__name__, 3, '[{}] Terminating'.format(self.id))
@@ -46,11 +46,11 @@ class TpsThread(Thread):
                 result = int(rs['result']['stack'][0][1],0)
                 self.log.log(self.__class__.__name__, 3, '[{}] Query completed in {} ms with result {} tps'.format(self.id,runtime_ms, result))
 
-                if last_result is not None:
-                    self.queue.put([int(time.time()), int((result-last_result)/time.time()-last_ts), int(result)])
+                if previous_result is not None:
+                    self.queue.put([int(time.time()), int((result-previous_result)/time.time()-previous_ts), int(result)])
 
-                last_result = result
-                last_ts = time.time()
+                previous_result = result
+                previous_ts = time.time()
             else:
                 self.log.log(self.__class__.__name__, 3, '[{}] Query failed in {} ms'.format(self.id,runtime_ms))
 
