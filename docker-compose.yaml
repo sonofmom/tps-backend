@@ -1,0 +1,22 @@
+version: '3.9'
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.9.1
+    environment:
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+      CLICKHOUSE_USER:
+      CLICKHOUSE_PASSWORD:
+      CLICKHOUSE_DB:
+
+      APP__DATABASE__CLICKHOUSE_DSN: clickhouse://${CLICKHOUSE_USER}:${CLICKHOUSE_PASSWORD}@clickhouse:8123/${CLICKHOUSE_DB}
+    ports:
+      - 8123:8123/tcp
+      - 9000:9000/tcp
+    ulimits:
+      nofile: 262144
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse/
+networks:
+  internal:
+volumes:
+  clickhouse_data:
