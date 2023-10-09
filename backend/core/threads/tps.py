@@ -4,7 +4,14 @@ import time
 import random
 
 class TpsThread(Thread):
-    def __init__(self, id, config, log=None, queue=None, gk=None, params=None, max_rps=1):
+    def __init__(self, 
+                 id, 
+                 config, 
+                 log=None, 
+                 queue=None, 
+                 gk=None, 
+                 params=None, 
+                 max_rps=1):
         Thread.__init__(self)
         self.id = id
         self.config = config

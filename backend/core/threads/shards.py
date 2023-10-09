@@ -4,7 +4,13 @@ import time
 import random
 
 class ShardsThread(Thread):
-    def __init__(self, id, config, log=None, queue=None, gk=None, max_rps=1):
+    def __init__(self, 
+                 id, 
+                 config, 
+                 log=None, 
+                 queue=None, 
+                 gk=None, 
+                 max_rps=1):
         Thread.__init__(self)
         self.id = id
         self.config = config
@@ -15,7 +21,6 @@ class ShardsThread(Thread):
         self.api = TonHttpApi(self.config["http-api"],self.log)
 
     def run(self):
-
         while True:
             if self.gk.kill_now:
                 self.log.log(self.__class__.__name__, 3, '[{}] Terminating'.format(self.id))

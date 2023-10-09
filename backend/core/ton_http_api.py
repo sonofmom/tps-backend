@@ -1,4 +1,5 @@
-import Libraries.tools.general as gt
+import backend.utils.general as gt
+
 
 class TonHttpApi:
     def __init__(self, config, log=None):
@@ -75,7 +76,4 @@ class TonHttpApi:
 
         except Exception as e:
             return None
-
-
-
 # end class

@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 #
-
-import sys
-import os
+import os, sys
 import argparse
-sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-import Libraries.tools.general as gt
 import time
+
 from psycopg.rows import dict_row
-from Classes.AppConfig import AppConfig
-from Classes.app.ShardsThread import ShardsThread
-from Classes.app.TpsThread import TpsThread
+
+from backend.core.threads.shards import ShardsThread
+from backend.core.threads.tps import TpsThread
+from backend.core.config import AppConfig
 from queue import Queue
+
+import backend.utils.general as gt
+
 
 def run():
     description = 'Read overlays data created by node(s) and updates database.'
