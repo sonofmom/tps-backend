@@ -32,16 +32,6 @@ class DatabaseSettings(BaseSettings):
     # pg_dsn: Optional[PostgresDsn]
     clickhouse_dsn: Optional[ClickhouseDsn]
 
-
-class TpsSettings(BaseSettings):
-    counter_address: str = Field()
-    rps: float = Field(0.1)
-
-
-class ShardsSettings(BaseSettings):
-    rps: float = Field(0.1)
-
-
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix='app__',
                                       env_nested_delimiter='__',
@@ -49,7 +39,7 @@ class Settings(BaseSettings):
 
     ton_http_api: TonHttpApiSettings
     database: DatabaseSettings
-    tps: TpsSettings
-    shards: ShardsSettings
+    counter_address: str = Field()
+    rps: float = Field(0.1)
 
     

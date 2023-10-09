@@ -1,4 +1,4 @@
-psutil==5.9.5
+# psutil==5.9.5
 aiohttp==3.8.6
 fastapi==0.103.2
 pydantic-settings==2.0.3

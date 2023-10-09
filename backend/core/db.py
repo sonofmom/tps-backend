@@ -1,23 +1,32 @@
-from clickhouse_connect import get_client
+import clickhouse_connect
 from clickhouse_connect.driver import Client
 
 from .settings import DatabaseSettings
 
 
 def get_client(settings: DatabaseSettings):
-    return clickhouse_connect.get_client(dsn=settings.clickhouse_dsn)
+    host = settings.clickhouse_dsn.hosts()[0]
+    dbname = settings.clickhouse_dsn.path[1:]
+    client = clickhouse_connect.get_client(host=host['host'],
+                                           port=host['port'],
+                                           user=host['username'],
+                                           password=host['password'],
+                                           database=dbname)
+    return client
 
 
 def create_tables(client: Client):
     sql = '''create table if not exists history(
-        record_id UInt64,
+        seqno UInt32,
+        gen_utime UInt32,
         timestamp DateTime,
-        transaction_count UInt64,
         shard_count UInt32,
-        tps Float32
+        tx_count UInt64,
+        gen_utime_delta UInt32,
+        tx_count_delta UInt32
     )
     engine = MergeTree()
-    primary key (record_id, timestamp)
-    order by timestamp
+    primary key (seqno, gen_utime)
+    order by (seqno, gen_utime, timestamp)
     '''
     client.command(sql)
