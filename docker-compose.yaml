@@ -20,6 +20,7 @@ services:
     volumes:
       - clickhouse_data:/var/lib/clickhouse/
   worker:
+    image: tps-backend-image:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -34,6 +35,18 @@ services:
       - ton-http-api_main
     restart: always
     command: python3 -m backend
+  api:
+    image: tps-backend-image:latest
+    environment:
+      APP__TON_HTTP_API__URL: http://main:8081/api/v2/jsonRPC
+      APP__TON_HTTP_API__API_TOKEN:
+      APP__COUNTER_ADDRESS:
+      APP__RPS:
+      APP__DATABASE__CLICKHOUSE_DSN: clickhouse://${CLICKHOUSE_USER}:${CLICKHOUSE_PASSWORD}@clickhouse:8123/${CLICKHOUSE_DB}
+    networks:
+      - internal
+    restart: always
+    command: uvicorn backend.api.app:app
 networks:
   internal:
   ton-http-api_main:
