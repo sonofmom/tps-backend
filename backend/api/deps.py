@@ -9,7 +9,7 @@ class SettingsDep:
     def __init__(self):
         self.settings = None
     
-    def __call__(self, *args, **kwargs):
+    def __call__(self):
         if self.settings is None:
             self.settings = Settings()
         return self.settings

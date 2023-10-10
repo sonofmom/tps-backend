@@ -9,9 +9,9 @@ services:
       CLICKHOUSE_DB:
 
       APP__DATABASE__CLICKHOUSE_DSN: clickhouse://${CLICKHOUSE_USER}:${CLICKHOUSE_PASSWORD}@clickhouse:8123/${CLICKHOUSE_DB}
-    ports:
-      - 8123:8123/tcp
-      - 9000:9000/tcp
+    # ports:
+    #   - 8123:8123/tcp
+    #   - 9000:9000/tcp
     ulimits:
       nofile: 262144
     networks:
@@ -46,7 +46,9 @@ services:
     networks:
       - internal
     restart: always
-    command: uvicorn backend.api.app:app
+    ports:
+      - 8082:8082
+    command: uvicorn backend.api.app:app --host 0.0.0.0 --port 8082
 networks:
   internal:
   ton-http-api_main:
