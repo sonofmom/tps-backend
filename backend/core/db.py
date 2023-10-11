@@ -21,6 +21,8 @@ def create_tables(client: Client):
         gen_utime UInt32,
         timestamp DateTime,
         shard_count UInt32,
+        val_count UInt32,
+        mc_val_count UInt32,
         tx_count UInt64,
         gen_utime_delta UInt32,
         tx_count_delta UInt32
