@@ -50,8 +50,7 @@ def get_datetime_string(timestamp=time.time()):
 
 
 def make_dir(dir):
-    if not os.path.exists(dir):
-        os.mkdir(dir)
+    os.makedirs(dir, exist_ok=True)
 
 
 def get_timestamp(timestamp=None):

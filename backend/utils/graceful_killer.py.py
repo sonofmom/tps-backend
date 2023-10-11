@@ -1,6 +1,7 @@
 import signal
 import time
 
+
 class GracefulKiller:
   kill_now = False
   def __init__(self):

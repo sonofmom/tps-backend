@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+cat <<EOF > .env
+APP__TON_HTTP_API__URL=http://localhost:8081/api/v2/jsonRPC
+APP__TON_HTTP_API__API_TOKEN=
+APP__COUNTER_ADDRESS=Ef9zCxnsKUwLALu_jS4uXuA_KAsObipmOOG5de8dSDCEUVMT
+APP__RPS=5.0
+
+CLICKHOUSE_USER=user1
+CLICKHOUSE_PASSWORD=changeme
+CLICKHOUSE_DB=tps
+EOF
