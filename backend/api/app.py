@@ -36,7 +36,7 @@ def get_tps(from_datetime: datetime=Query(None, title='From date'),
     if drop_zeros:
         where_clause.append(f'tx_count_delta > 0')
     if where_clause:
-        where_clause = ' and '.join(*where_clause)
+        where_clause = ' and '.join(where_clause)
         query += ' where ' + where_clause
     query += f' order by seqno {sort}'
     query += f' limit {limit}'
