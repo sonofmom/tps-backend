@@ -34,7 +34,7 @@ def get_tps(from_datetime: datetime=Query(None, title='From date'),
         where_clause = ' and '.join(*where_clause)
         query += ' ' + where_clause
     if drop_zeros:
-        query += ' where tx_delta > 0'
+        query += ' where tx_count_delta > 0'
     query += f' order by seqno {sort}'
     query += f' limit {limit}'
     logger.info(f'Query: {query}')
