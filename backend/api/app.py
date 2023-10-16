@@ -34,7 +34,7 @@ def get_tps(from_datetime: datetime=Query(None, title='From date'),
     if seqno_continuation is not None:
         where_clause.append(f"seqno < {seqno_continuation}")
     if drop_zeros:
-        where_clause.append(f' where tx_count_delta > 0')
+        where_clause.append(f'tx_count_delta > 0')
     if where_clause:
         where_clause = ' and '.join(*where_clause)
         query += ' where ' + where_clause
