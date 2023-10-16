@@ -28,9 +28,9 @@ def get_tps(from_datetime: datetime=Query(None, title='From date'),
     query = 'select * from tps.history'
     where_clause = []
     if from_datetime is not None:
-        where_clause.append(f"timestamp >= {from_datetime}")
+        where_clause.append(f"timestamp >= '{from_datetime}'")
     if to_datetime is not None:
-        where_clause.append(f"timestamp <= {to_datetime}")
+        where_clause.append(f"timestamp <= '{to_datetime}'")
     if seqno_continuation is not None:
         where_clause.append(f"seqno < {seqno_continuation}")
     if drop_zeros:
