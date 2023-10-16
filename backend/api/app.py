@@ -20,6 +20,7 @@ app = FastAPI(docs_url='/')
 def get_tps(from_datetime: datetime=Query(None, title='From date'),
             to_datetime: datetime=Query(None, title='To date'),
             limit: int=Query(2048, title='Max records in response', ge=0, le=2048),
+            drop_zeros: bool=Query(False, title='Drop records with tx_delta==0'),
             sort: str=Query('desc', title='Sort order', enum=['asc', 'desc']),
             db: Client=Depends(db_dep)):
     logger.info('1')
@@ -32,6 +33,8 @@ def get_tps(from_datetime: datetime=Query(None, title='From date'),
     if where_clause:
         where_clause = ' and '.join(*where_clause)
         query += ' ' + where_clause
+    if drop_zeros:
+        query += ' where tx_delta > 0'
     query += f' order by seqno {sort}'
     query += f' limit {limit}'
     logger.info(f'Query: {query}')
