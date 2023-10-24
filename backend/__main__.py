@@ -3,7 +3,7 @@ import asyncio
 import argparse
 import logging
 
-from backend.core.tasks import metrics_task
+from backend.core.tasks import metrics_task, run_once_task
 from backend.core.db import create_tables, get_client
 from backend.core.settings import Settings
 
@@ -22,6 +22,8 @@ async def main():
     create_tables(get_client(settings.database))
 
     # run loop
+    await run_once_task(settings)
+    
     prev_record = None
     while True:
         prev_record = await metrics_task(settings, prev_record=prev_record)

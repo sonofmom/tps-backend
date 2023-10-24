@@ -91,6 +91,13 @@ async def get_counter(session: ClientSession, settings: Settings):
     return counter_value
 
 
+async def run_once_task(settings: Settings):
+    # client = get_client(settings.database)
+    # client.command('delete from history where tx_count > 0')
+
+    pass
+
+
 async def metrics_task(settings: Settings, prev_record: Optional[Tuple[Any]]=None):
     headers = None
     if settings.ton_http_api.api_token:
@@ -124,11 +131,17 @@ async def metrics_task(settings: Settings, prev_record: Optional[Tuple[Any]]=Non
     timestamp = datetime.utcnow()
     client = get_client(settings.database)
     data = [seqno, cur_gen_utime, timestamp, cur_shards, val_count, mc_val_count, cur_tx, delta_utime, delta_tx]
-    column_names = ['seqno', 'gen_utime', 'timestamp', 'shard_count', 'val_count', 'mc_val_count', 'tx_count', 'gen_utime_delta', 'tx_count_delta']
-    client.insert('history', 
-                  data=[data], 
-                  column_names=column_names)
+    insert = False
+    if delta_tx > 0 or cur_tx == 0:
+        insert = True
+        column_names = ['seqno', 'gen_utime', 'timestamp', 'shard_count', 'val_count', 'mc_val_count', 'tx_count', 'gen_utime_delta', 'tx_count_delta']
+        client.insert('history', 
+                    data=[data], 
+                    column_names=column_names)
 
     # logs
-    logger.info(f'{data}')
-    return (seqno, cur_gen_utime, cur_tx)
+    logger.info(f'{insert} {data}')
+    if insert or not prev_record:
+        return (seqno, cur_gen_utime, cur_tx)
+    else:
+        return (seqno, prev_gen_utime, prev_tx)
