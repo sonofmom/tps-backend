@@ -37,6 +37,9 @@ services:
     command: python3 -m backend
   api:
     image: tps-backend-image:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       APP__TON_HTTP_API__URL:
       APP__TON_HTTP_API__API_TOKEN:

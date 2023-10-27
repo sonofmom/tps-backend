@@ -132,7 +132,7 @@ async def metrics_task(settings: Settings, prev_record: Optional[Tuple[Any]]=Non
     client = get_client(settings.database)
     data = [seqno, cur_gen_utime, timestamp, cur_shards, val_count, mc_val_count, cur_tx, delta_utime, delta_tx]
     insert = False
-    if delta_tx > 0 or cur_tx == 0:
+    if delta_tx > 0 or cur_tx == 0 or True:
         insert = True
         column_names = ['seqno', 'gen_utime', 'timestamp', 'shard_count', 'val_count', 'mc_val_count', 'tx_count', 'gen_utime_delta', 'tx_count_delta']
         client.insert('history', 
