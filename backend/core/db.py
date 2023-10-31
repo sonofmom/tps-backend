@@ -1,9 +1,11 @@
 import clickhouse_connect
 from clickhouse_connect.driver import Client
+from clickhouse_connect.driver import httputil
 
 from .settings import DatabaseSettings
 
 
+big_pool_mgr = httputil.get_pool_manager(maxsize=256, num_pools=16)
 def get_client(settings: DatabaseSettings):
     host = settings.clickhouse_dsn.hosts()[0]
     dbname = settings.clickhouse_dsn.path[1:]
@@ -11,7 +13,8 @@ def get_client(settings: DatabaseSettings):
                                            port=host['port'],
                                            user=host['username'],
                                            password=host['password'],
-                                           database=dbname)
+                                           database=dbname,
+                                           pool_mgr=big_pool_mgr)
     return client
 
 

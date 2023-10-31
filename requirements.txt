@@ -6,3 +6,5 @@ uvicorn==0.23.2
 clickhouse-connect==0.6.14
 pytonlib==0.0.50
 gunicorn
+ring
+memcache

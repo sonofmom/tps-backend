@@ -1,4 +1,5 @@
 import logging
+import ring, memcache
 
 from datetime import datetime
 from typing import List
@@ -16,15 +17,21 @@ logger = logging.getLogger(__name__)
 app = FastAPI(docs_url='/', dependencies=[Depends(api_key_dep)])
 
 
+# mc = memcache.Client(['127.0.0.1:11211'])
+
+#@ring.memcache(mc, time=5)
+def read_data(query, db):
+    return db.query(query)
+
+
 @app.get('/tps', response_model=List[schema.TpsRecord])
 def get_tps(from_datetime: datetime=Query(None, title='From date'),
             to_datetime: datetime=Query(None, title='To date'),
-            limit: int=Query(256, title='Max records in response', ge=0, le=2048),
+            limit: int=Query(256, title='Max records in response', ge=0, le=256),
             seqno_continuation: int=Query(None, title='Set seqno for batch reading'),
             drop_zeros: bool=Query(False, title='Drop records with tx_delta==0'),
             sort: str=Query('desc', title='Sort order', enum=['asc', 'desc']),
             db: Client=Depends(db_dep)):
-    logger.info('1')
     query = 'select * from tps.history'
     where_clause = []
     if from_datetime is not None:
@@ -41,7 +48,7 @@ def get_tps(from_datetime: datetime=Query(None, title='From date'),
     query += f' order by seqno {sort}'
     query += f' limit {limit}'
     logger.info(f'Query: {query}')
-    res = db.query(query)
+    res = read_data(query, db)
     
     result = []
     for x in res.named_results():
